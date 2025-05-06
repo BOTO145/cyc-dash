@@ -18,12 +18,34 @@
             font-size: 2em;
             font-weight: bold;
         }
+        body.dark-mode {
+            background-color: #181a1b !important;
+            color: #f1f1f1 !important;
+        }
+        .dark-mode .card {
+            background-color: #23272b;
+            color: #f1f1f1;
+        }
+        .dark-mode .card-header {
+            background-color: #23272b;
+            color: #f1f1f1;
+        }
+        .dark-mode .navbar, .dark-mode .container {
+            background-color: #181a1b !important;
+        }
+        .dark-mode .btn-dark-mode {
+            background-color: #23272b;
+            color: #f1f1f1;
+            border: 1px solid #444;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-4">
-        <h1 class="text-center mb-4">Cycle Monitoring Dashboard</h1>
-        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-center mb-0">Cycle Monitoring Dashboard</h1>
+            <button class="btn btn-dark-mode" id="darkModeToggle">🌙 Dark Mode</button>
+        </div>
         <div class="row">
             <!-- Map -->
             <div class="col-md-8">
@@ -78,6 +100,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Maximum Speed</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="value-display" id="max-speed">0 km/h</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,6 +125,16 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
+
+            // Dark mode toggle
+            $('#darkModeToggle').on('click', function() {
+                $('body').toggleClass('dark-mode');
+                localStorage.setItem('darkMode', $('body').hasClass('dark-mode'));
+            });
+            // Load dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                $('body').addClass('dark-mode');
+            }
 
             // Update data every second
             setInterval(updateData, 1000);
@@ -128,6 +168,11 @@
                     $('#gyro-x').text(data.gyro.x.toFixed(2));
                     $('#gyro-y').text(data.gyro.y.toFixed(2));
                     $('#gyro-z').text(data.gyro.z.toFixed(2));
+                }
+
+                // Update max speed
+                if (data.max_speed !== undefined && data.max_speed !== null) {
+                    $('#max-speed').text(data.max_speed + ' km/h');
                 }
             });
         }
