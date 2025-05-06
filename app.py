@@ -1,6 +1,3 @@
-from flask import Flask, render_template, jsonify
-import json
-from flask import Flask, render_template, jsonify, request
 from flask import Flask, render_template, jsonify, request
 import json
 
@@ -41,22 +38,3 @@ def receive_data():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)
-
-    self.client.loop_start()
-        
-    def get_data(self):
-        return self.data
-
-mqtt_subscriber = MQTTSubscriber()
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/get_data')
-def get_data():
-    return jsonify(mqtt_subscriber.get_data())
-
-if __name__ == '__main__':
-    mqtt_subscriber.start()
-    app.run(debug=True, port=5000)
